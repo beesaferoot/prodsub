@@ -10,12 +10,12 @@
 ### Setup instructions
 
 - Run command `go mod tidy`
-- Create Local postgres database with name `prodsub_db` with default configurations i.e
+- Create a local postgres database using name `prodsub_db` with default configurations i.e
   `host=localhost user=postgres dbname=prodsub_db port=5432 sslmode=disable`
 
 ### Unit tests
 
-Run command to execture all unit tests on the project
+Run command to execute all unit tests on the project
 
 ```bash
     make test

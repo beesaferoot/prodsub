@@ -1,0 +1,168 @@
+
+
+syntax = "proto3";
+
+package prodsub.product.v1;
+
+option go_package = "pb/gen";
+
+import "validator.proto";
+import "google/protobuf/timestamp.proto";
+
+service ProductService {
+    rpc CreateProduct(ProductCreateRequest) returns (ProductCreateResponse);
+    rpc GetProduct(ProductGetRequest) returns (ProductGetResponse);
+    rpc UpdateProduct(ProductUpdateRequest) returns (ProductUpdateResponse);
+    rpc DeleteProduct(ProductDeleteRequest) returns (ProductDeleteResponse);
+    rpc ListProduct(ProductListRequest) returns (ProductListResponse);
+}
+
+service SubscriptionService {
+    rpc CreateSubscription(SubscriptionCreateRequest) returns (SubscriptionCreateResponse);
+    rpc GetSubscription(SubscriptionGetRequest) returns (SubscriptionGetResponse);
+    rpc UpdateSubscription(SubscriptionUpdateRequest) returns (SubscriptionUpdateResponse);
+    rpc DeleteSubscription(SubscriptionDeleteRequest) returns (SubscriptionDeleteResponse);
+    rpc ListSubscription(SubscriptionListRequest) returns (SubscriptionListResponse);
+}
+
+
+message ProductCreateRequest {
+    string name = 1;
+    string description = 2;
+    double price = 3;
+    google.protobuf.Timestamp createAt = 4 [json_name = "create_at"];
+    google.protobuf.Timestamp updateAt = 5 [json_name = "updated_at"];
+    ProductType productType = 6 [json_name = "product_type"];
+    ProductAttribute productAttribute = 7 [json_name = "product_attribute"];
+}
+
+message ProductCreateResponse {
+    Product product = 1;
+}
+
+message ProductGetRequest {
+    string productId = 1  [(validator.field) = {uuid_ver: 4, string_not_empty: true}, json_name = "product_id"];
+}
+
+message ProductGetResponse {
+    Product product = 1;
+}
+
+message ProductUpdateRequest {
+    string productId = 1  [(validator.field) = {uuid_ver: 4, string_not_empty: true}, json_name = "product_id"];
+    ProductDetails product = 2;
+}
+
+message ProductUpdateResponse {
+    Product product = 1;
+}
+
+message ProductDeleteRequest {
+    string productId = 1  [(validator.field) = {uuid_ver: 4, string_not_empty: true}, json_name = "product_id"];
+}
+
+message ProductDeleteResponse {
+
+}
+
+message ProductListRequest {
+    ProductType productType = 1 [json_name = "product_type"];
+}
+
+message ProductListResponse {
+    repeated Product products = 1;
+}
+
+message ProductDetails {
+    string name = 2;
+    string description = 3;
+    double price = 4;
+    ProductAttribute attribute = 5;
+}
+
+message Product {
+    string id = 1 [(validator.field) = {uuid_ver: 4, string_not_empty: true}];
+    string name = 2;
+    string description = 3;
+    double price = 4;
+    google.protobuf.Timestamp createAt = 5 [json_name = "create_at"];
+    google.protobuf.Timestamp updateAt = 6 [json_name = "updated_at"];
+    ProductType productType = 7 [json_name = "product_type"];
+    ProductAttribute productAttribute = 8 [json_name = "product_attribute"];
+}
+
+
+message ProductAttribute {
+    int64 fileSize = 8 [json_name = "file_size"];
+    string downloadLink = 9 [json_name = "download_link"];
+    double weight = 10;
+    string dimensions = 11;
+    string subscriptionPeriod = 12 [json_name = "subscription_period"];
+    double renewalPrice = 13 [json_name = "renewal_price"];
+}
+
+enum ProductType {
+    PHYSICAL = 0;
+    DIGITAL = 1;
+    SUBSCRIPTION = 2;
+}
+
+
+message SubscriptionCreateRequest {
+    string productId = 2 [json_name = "product_id", (validator.field) = {uuid_ver: 4, string_not_empty: true}];
+    string planName = 3 [json_name = "plan_name"];
+    int64 duration = 4;
+    double price = 5;
+}
+
+message SubscriptionCreateResponse {
+    Subscription subscription = 1;
+}
+
+message SubscriptionGetRequest {
+     string subscriptionId = 2 [json_name = "subscription_id", (validator.field) = {uuid_ver: 4, string_not_empty: true}];
+}
+
+message SubscriptionGetResponse {
+    Subscription subscription = 1;
+}
+
+message SubscriptionUpdateRequest {
+    string subscriptionId = 1 [json_name = "subscription_id", (validator.field) = {uuid_ver: 4, string_not_empty: true}];
+    SubscriptionDetail subscription = 2;
+}
+
+message SubscriptionUpdateResponse {
+    Subscription subscription = 1;
+}
+
+
+message SubscriptionDeleteRequest {
+    string subscriptionId = 2 [json_name = "subscription_id", (validator.field) = {uuid_ver: 4, string_not_empty: true}];
+}
+
+message SubscriptionDeleteResponse {
+
+}
+
+message SubscriptionListRequest {
+    string productId = 2 [json_name = "product_id", (validator.field) = {uuid_ver: 4, string_not_empty: true}];
+}
+
+message SubscriptionListResponse {
+    repeated Subscription subscriptions = 1;
+}
+
+message SubscriptionDetail {
+    string planName = 1 [json_name = "plan_name"];
+    int64 duration = 2;
+    double price = 3;
+}
+
+message Subscription {
+    string id = 1 [(validator.field) = {uuid_ver: 4, string_not_empty: true}];
+    string productId = 2 [json_name = "product_id", (validator.field) = {uuid_ver: 4, string_not_empty: true}];
+    string planName = 3 [json_name = "plan_name"];
+    int64 duration = 4;
+    double price = 5;
+}

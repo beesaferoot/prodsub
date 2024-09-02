@@ -12,6 +12,7 @@
 - Run command `go mod tidy`
 - Create a local postgres database using name `prodsub_db` with default configurations i.e
   `host=localhost user=postgres dbname=prodsub_db port=5432 sslmode=disable`
+- Enable uuid generation in postgres by creating extension `create extension if not exists "uuid-ossp";`
 
 ### Unit tests
 
